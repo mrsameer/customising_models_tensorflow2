@@ -1,0 +1,42 @@
+1) Which of the following functional API model definitions is equivalent to the following Sequential model?
+	from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+model = Sequential([Conv2D(64, 3, activation=‘tanh’, input_shape=(28, 28, 3)),
+                    MaxPooling2D(3),
+                    Flatten(),
+                    Dense(16, activation=‘tanh’),
+                    Dense(1, activation=‘sigmoid’)])
+
+Ans: from tensorflow.keras.models import Model
+	 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+	 inputs = Input(shape = (28, 28, 3))
+	 h = Conv2D(64, 3, activation = 'tanh')(inputs)
+	 h = MaxPooling2D(3)(h)
+	 h = Flatten()(h)
+	 h = Dense(16, activation='tanh')(h)
+	 outputs = Dense(1, activation='sigmoid')(h)
+
+	 model = Mode(inputs = inputs, outputs = outputs)
+
+2) Consider the following model, buit using the functional API:
+	from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Dense, Concatenate
+
+	inputs = Input(shape=(10,), name=‘main_inputs’)
+	h = Dense(16, activation=‘relu’)(inputs)
+	aux_inputs = Input(shape=(2,), name=‘aux_inputs’)
+	h = Concatenate()([h, aux_inputs])
+	outputs = Dense(1, name=‘main_outputs’)(h)
+	aux_outputs = Dense(4, activation=‘softmax’, name=‘aux_outputs’)(h)
+	model = Model(inputs=[aux_inputs, inputs], outputs=[outputs, aux_outputs])
+
+The model is compiled and trained according to
+
+	model.compile(loss=[‘mse’, ‘categorical_crossentropy’])
+	model.fit([X_train1, X_train2], [y_train1, y_train2])
+Which of the following are equivalent compile and fit calls?
+
+Ans: model.compile(loss={‘main_outputs’: ‘mse’, ‘aux_outputs’: ‘categorical_crossentropy’})
+model.fit({‘main_inputs’: X_train2, ‘aux_inputs’: X_train1}, {‘main_outputs’: y_train1, ‘aux_outputs’: y_train2})
