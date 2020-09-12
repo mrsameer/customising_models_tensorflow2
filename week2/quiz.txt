@@ -1,0 +1,43 @@
+1) Which key word can we use to make an ordinary python function into a generator?
+Ans: yield (Putting this into a function will cause the return value to become the generator's yield when using the next() function)
+
+2) What will the following code print when run? 
+	def get_generator(i):
+    for x in range(2):
+        yield(x+i)
+	my_generator = get_generator(3)
+	next(my_generator)
+	print(next(my_generator))
+
+Ans: 4 (we create a generator using 3 as the value of i. We then call the next() which yields the first iteration of the loop. We then print next() on the second iteration of the for loop of the generator)
+
+3) Imagine that you want to show your friends some pictures from a recent trip you went on. They are in a folder, and you want to show them to them one by one. Both the scripts in the pseudo-code below do the same job. Why might we want to use the first script over the second?
+
+	script1: 
+		def get_pictures(image_files):
+		    for image in image_files:
+		        image_data = load(image)
+		        yield image_data
+
+		picture_generator = get_pictures(my_image_file_names)
+
+		for i in range(number_of_pictures):
+		    picture = next(picture_generator)
+		    display(picture)
+
+    script2: 
+    	def get_all_pictures(folder):
+		    all_pictures = []
+		    for image in folder:
+		        all_pictures.append(load(image))
+		    return all_pictures
+
+		all_my_pictures = get_all_pictures(my_image_file_names)
+
+		for picture in all_my_pictures:
+		    display(picture)
+
+Ans: 
+	1) Because we have to wait less time to see the first picture. (Since we do not have to load the entire set of images into memory, we only load an image as and when we want to view it. This might be preferred in the case that we want to show them to other people one by one, and is an advantage of using generators in this case.)
+
+	2) Because the memory overhead would be lower. (The second script appends to an array which stores all the images at once, requiring that we have enough memory to store all the images. On the other hand, the first script loads each image one by one, when we want to view it, requiring only that we have enough memory available to store a single image. )
